@@ -11,6 +11,11 @@ In order to create a fat jar package, install jdk >= 8 and Maven; afterwards, ru
 mvn clean package
 ```
 
+For configuring the app:
+
+Create a properties file using sample vertx-echoserver-config.properties file
+Create an environment variable named VERTX_ECHOSERVER_CONFIG pointing to your properties file
+
 For running the app:
 
 ```bash
