@@ -14,6 +14,6 @@ mvn clean package
 For running the app:
 
 ```bash
-java -jar target/my-first-app-1.0-SNAPSHOT-fat.jar
+java -jar target/my-first-app-1.0-SNAPSHOT-fat.jar -instances {numberOfInstance}
 ```
 

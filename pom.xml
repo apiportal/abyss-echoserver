@@ -11,7 +11,7 @@
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-core</artifactId>
-      <version>3.0.0</version>
+      <version>3.6.3</version>
     </dependency>
   </dependencies>
 
@@ -19,7 +19,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.3</version>
+        <version>3.8.0</version>
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
@@ -28,7 +28,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>2.3</version>
+        <version>3.2.1</version>
         <executions>
           <execution>
             <phase>package</phase>
@@ -40,7 +40,7 @@
                 <transformer
                   implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                   <manifestEntries>
-                    <Main-Class>io.vertx.core.Starter</Main-Class>
+                    <Main-Class>io.vertx.core.Launcher</Main-Class>
                     <Main-Verticle>io.vertx.blog.first.MyFirstVerticle</Main-Verticle>
                   </manifestEntries>
                 </transformer>
