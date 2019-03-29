@@ -1,4 +1,4 @@
-package io.vertx.blog.first;
+package com.verapi.abyss.echo.server;
 
 import io.vertx.config.ConfigRetriever;
 import io.vertx.config.ConfigRetrieverOptions;
@@ -15,9 +15,14 @@ import io.vertx.micrometer.VertxJmxMetricsOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MyLauncher extends VertxCommandLauncher implements VertxLifecycleHooks {
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
-    private Logger logger = LoggerFactory.getLogger(MyLauncher.class);
+public class Launcher extends VertxCommandLauncher implements VertxLifecycleHooks {
+
+    private Logger logger = LoggerFactory.getLogger(Launcher.class);
 
     public static void main(String[] args) {
 
@@ -25,7 +30,7 @@ public class MyLauncher extends VertxCommandLauncher implements VertxLifecycleHo
         if (null == System.getProperty("vertx.logger-delegate-factory-class-name"))
             System.setProperty("vertx.logger-delegate-factory-class-name", io.vertx.core.logging.SLF4JLogDelegateFactory.class.getCanonicalName());
 
-        new MyLauncher().dispatch(args);
+        new Launcher().dispatch(args);
     }
 
     @Override
@@ -35,6 +40,8 @@ public class MyLauncher extends VertxCommandLauncher implements VertxLifecycleHo
 
     @Override
     public void beforeStartingVertx(VertxOptions options) {
+
+        CompletableFuture<JsonObject> future = new CompletableFuture<>();
 
         ConfigStoreOptions configStoreOptions = new ConfigStoreOptions()
                 .setType("env")
@@ -47,13 +54,15 @@ public class MyLauncher extends VertxCommandLauncher implements VertxLifecycleHo
         ConfigRetriever configRetriever = ConfigRetriever.create(vertx, configRetrieverOptions);
 
         configRetriever.getConfig(event -> {
+
             if (event.failed()) {
                 vertx.close();
                 logger.error(event.cause().getLocalizedMessage());
+                future.completeExceptionally(event.cause());
                 throw new RuntimeException(event.cause());
             } else {
                 String configFilePath = event.result().getString("VERTX_ECHOSERVER_CONFIG");
-                logger.info(configFilePath);
+                logger.info("loading config file [{}]", configFilePath);
 
                 ConfigStoreOptions fileConfigStoreOptions = new ConfigStoreOptions()
                         .setType("file")
@@ -65,14 +74,17 @@ public class MyLauncher extends VertxCommandLauncher implements VertxLifecycleHo
                 fileConfigRetriever.getConfig(fileConfigEvent -> {
                     if (fileConfigEvent.failed()) {
                         vertx.close();
+                        logger.info("unable to load config file [{}]", configFilePath);
                         logger.error(fileConfigEvent.cause().getLocalizedMessage());
+                        future.completeExceptionally(fileConfigEvent.cause());
                         System.exit(1);
                     } else {
+                        logger.info("successfully loaded config file [{}]", configFilePath);
                         logger.info(fileConfigEvent.result().encodePrettily());
                         options.setMetricsOptions(new MicrometerMetricsOptions()
                                 .setJmxMetricsOptions(new VertxJmxMetricsOptions()
                                         .setStep(10)
-                                        .setDomain("vertx-echo-server")
+                                        .setDomain("vertx.echo.server")
                                         .setEnabled(true))
                                 .setInfluxDbOptions(
                                         new VertxInfluxDbOptions()
@@ -80,16 +92,22 @@ public class MyLauncher extends VertxCommandLauncher implements VertxLifecycleHo
                                                 .setDb(fileConfigEvent.result().getString("influxdb.dbname"))
                                                 .setUserName(fileConfigEvent.result().getString("influxdb.dbuser.name"))
                                                 .setPassword(fileConfigEvent.result().getString("influxdb.dbuser.password"))
-                                                .setEnabled((fileConfigEvent.result().getBoolean("influxdb.logger.enabled")))
+                                                .setEnabled(fileConfigEvent.result().getBoolean("influxdb.logger.enabled"))
                                 )
                                 .setEnabled(true));
                         vertx.close();
+                        future.complete(fileConfigEvent.result());
                     }
                 });
             }
         });
-
-
+        //wait till asynch code block completed to set metrics framework settings
+        try {
+            future.get(60, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            logger.error(e.getLocalizedMessage());
+            System.exit(1);
+        }
     }
 
     @Override
