@@ -7,12 +7,86 @@
     <artifactId>abyss-echo-server</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <name>Abyss Echo Server</name>
+    <description>Abyss Echo Server Project</description>
+    <url>https://apiportal.com</url>
+
+    <organization>
+        <name>Verapi Software Technologies</name>
+        <url>https://verapi.com</url>
+    </organization>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Halil ÖZKAN</name>
+            <id>HalilOzkan</id>
+            <email>halil.ozkan@verapi.com</email>
+            <url>https://github.com/HalilOzkan</url>
+            <organization>Verapi</organization>
+            <organizationUrl>https://verapi.com</organizationUrl>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <timezone>+3</timezone>
+        </developer>
+    </developers>
+
+    <contributors>
+        <contributor>
+            <name>Güray YILDIRIM</name>
+            <email>guray@gurayyildirim.com.tr</email>
+            <url>https://github.com/gurayyildirim</url>
+            <organization>gurayyildirim</organization>
+            <organizationUrl>https://www.gurayyildirim.com.tr/</organizationUrl>
+            <roles>
+                <role>DevOps Engineer</role>
+            </roles>
+            <timezone>+3</timezone>
+        </contributor>
+    </contributors>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/apiportal/abyss-echoserver/issues</url>
+    </issueManagement>
+
+    <scm>
+        <url>https://github.com/apiportal/abyss-echoserver</url>
+        <connection>scm:git:git://github.com/apiportal/abyss-echoserver.git</connection>
+        <developerConnection>scm:git:git@github.com:apiportal/abyss-echoserver.git</developerConnection>
+    </scm>
+
     <properties>
         <version.vertx>3.6.3</version.vertx>
-        <version.slf4j>1.7.25</version.slf4j>
+        <version.slf4j>1.7.26</version.slf4j>
         <version.logback>1.2.3</version.logback>
-        <version.micrometer>1.1.3</version.micrometer>
-        <version.jansi>1.17.1</version.jansi>
+        <version.micrometer>1.1.4</version.micrometer>
+        <version.jansi>1.18</version.jansi>
+        <version.maven-project-info-reports-plugin>3.0.0</version.maven-project-info-reports-plugin>
+        <versions-maven-plugin>2.5</versions-maven-plugin>
+        <version.maven-site-plugin>3.7.1</version.maven-site-plugin>
+        <version.surefire-report.plugin>2.21.0</version.surefire-report.plugin>
+        <version.maven-release-plugin>2.5.3</version.maven-release-plugin>
+        <version.maven-enforcer-plugin>3.0.0-M2</version.maven-enforcer-plugin>
+        <version.maven-resources-plugin>3.1.0</version.maven-resources-plugin>
+        <version.maven-dependency-plugin>3.1.1</version.maven-dependency-plugin>
+        <version.maven-shade-plugin>3.2.1</version.maven-shade-plugin>
+        <version.maven-compiler-plugin>3.8.0</version.maven-compiler-plugin>
+        <version.clean.plugin>3.1.0</version.clean.plugin>
+        <version.deploy.plugin>2.8.2</version.deploy.plugin>
+        <version.install.plugin>2.5.2</version.install.plugin>
+        <version.maven-jar-plugin>3.1.0</version.maven-jar-plugin>
+        <version.surefire.plugin>3.0.0-M3</version.surefire.plugin>
+        <version.assembly.plugin>3.1.1</version.assembly.plugin>
+        <site.path>snapshot</site.path>
     </properties>
 
     <dependencies>
@@ -64,10 +138,71 @@
     </dependencies>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>${version.maven-site-plugin}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-report-plugin</artifactId>
+                    <version>${version.surefire-report.plugin}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>${version.assembly.plugin}</version>
+                </plugin>
+                <plugin>
+                    <!-- Deploy the web site -->
+                    <groupId>com.github.github</groupId>
+                    <artifactId>site-maven-plugin</artifactId>
+                    <version>0.12</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>site</goal>
+                            </goals>
+                            <!-- select the Maven phase in which the plugin will be executed -->
+                            <phase>site-deploy</phase>
+                            <configuration>
+                                <!-- Plugin configuration ges here -->
+
+                                <server>github</server>
+
+                                <!-- The commit message -->
+                                <message>Building site for ${project.version}</message>
+                                <!-- The location where the site is uploaded -->
+                                <path>${site.path}</path>
+                                <!-- Use merge or override the content -->
+                                <merge>true</merge>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>${version.maven-dependency-plugin}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${version.surefire.plugin}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>${version.clean.plugin}</version>
+            </plugin>
+            <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
+                <version>${version.maven-compiler-plugin}</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
@@ -76,7 +211,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.1</version>
+                <version>${version.maven-shade-plugin}</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -103,14 +238,147 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>${version.maven-resources-plugin}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>${version.maven-dependency-plugin}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>${version.maven-release-plugin}</version>
+                <configuration>
+                    <tagNameFormat>v@{project.version}</tagNameFormat>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>${version.maven-enforcer-plugin}</version>
+                <executions>
+                    <execution>
+                        <id>enforce-maven</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>3.3.9</version>
+                                </requireMavenVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>enforce-java</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireJavaVersion>
+                                    <version>1.8.0</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>${version.install.plugin}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>${version.deploy.plugin}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${version.maven-jar-plugin}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>${version.maven-project-info-reports-plugin}</version>
+            </plugin>
+            <!--             <plugin> -->
+            <!--                 <groupId>org.apache.maven.plugins</groupId> -->
+            <!--                 <artifactId>maven-javadoc-plugin</artifactId> -->
+            <!--                 <version>${version.maven-javadoc-plugin}</version> -->
+            <!--                 <configuration> -->
+            <!--                     <show>private</show> -->
+            <!--                     <nohelp>true</nohelp> -->
+            <!--                 </configuration> -->
+            <!--             </plugin> -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>analyze-report</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <!--             <plugin> -->
+            <!--                 <groupId>org.apache.maven.plugins</groupId> -->
+            <!--                 <artifactId>maven-javadoc-plugin</artifactId> -->
+            <!--                 <configuration> -->
+            <!--                     <stylesheetfile>${basedir}/src/main/javadoc/stylesheet.css</stylesheetfile> -->
+            <!--                     <show>public</show> -->
+            <!--                 </configuration> -->
+            <!--             </plugin> -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <reportSets>
+                    <reportSet>
+                        <id>integration-tests</id>
+                        <reports>
+                            <report>failsafe-report-only</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>${versions-maven-plugin}</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>dependency-updates-report</report>
+                            <report>plugin-updates-report</report>
+                            <report>property-updates-report</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <properties>
+                <site.path>release</site.path>
+            </properties>
+        </profile>
+    </profiles>
 
 </project>

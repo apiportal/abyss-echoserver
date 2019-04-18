@@ -61,7 +61,7 @@ public class Launcher extends VertxCommandLauncher implements VertxLifecycleHook
                 future.completeExceptionally(event.cause());
                 throw new RuntimeException(event.cause());
             } else {
-                String configFilePath = event.result().getString("VERTX_ECHOSERVER_CONFIG");
+                String configFilePath = event.result().getString("ABYSS_ECHOSERVER_CONFIG");
                 logger.info("loading config file [{}]", configFilePath);
 
                 ConfigStoreOptions fileConfigStoreOptions = new ConfigStoreOptions()
@@ -84,7 +84,7 @@ public class Launcher extends VertxCommandLauncher implements VertxLifecycleHook
                         options.setMetricsOptions(new MicrometerMetricsOptions()
                                 .setJmxMetricsOptions(new VertxJmxMetricsOptions()
                                         .setStep(10)
-                                        .setDomain("vertx.echo.server")
+                                        .setDomain("abyss.echo.server")
                                         .setEnabled(true))
                                 .setInfluxDbOptions(
                                         new VertxInfluxDbOptions()
