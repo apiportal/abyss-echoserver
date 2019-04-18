@@ -87,6 +87,8 @@
         <version.assembly.plugin>3.1.1</version.assembly.plugin>
         <version.maven-gpg-plugin.plugin>1.6</version.maven-gpg-plugin.plugin>
         <version.maven-scm-publish-plugin>3.0.0</version.maven-scm-publish-plugin>
+        <version.maven-source-plugin>3.0.1</version.maven-source-plugin>
+        <version.maven-javadoc-plugin>3.0.0</version.maven-javadoc-plugin>
         <site.path>snapshot</site.path>
     </properties>
 
@@ -268,7 +270,9 @@
                 <configuration>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <tagNameFormat>v@{project.version}</tagNameFormat>
+                    <useReleaseProfile>false</useReleaseProfile>
                     <releaseProfiles>release</releaseProfiles>
+                    <goals>deploy</goals>
                 </configuration>
             </plugin>
             <plugin>
@@ -374,6 +378,33 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${version.maven-source-plugin}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${version.maven-javadoc-plugin}</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
@@ -384,15 +415,6 @@
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <version>${version.maven-project-info-reports-plugin}</version>
             </plugin>
-            <!--             <plugin> -->
-            <!--                 <groupId>org.apache.maven.plugins</groupId> -->
-            <!--                 <artifactId>maven-javadoc-plugin</artifactId> -->
-            <!--                 <version>${version.maven-javadoc-plugin}</version> -->
-            <!--                 <configuration> -->
-            <!--                     <show>private</show> -->
-            <!--                     <nohelp>true</nohelp> -->
-            <!--                 </configuration> -->
-            <!--             </plugin> -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -404,14 +426,6 @@
                     </reportSet>
                 </reportSets>
             </plugin>
-            <!--             <plugin> -->
-            <!--                 <groupId>org.apache.maven.plugins</groupId> -->
-            <!--                 <artifactId>maven-javadoc-plugin</artifactId> -->
-            <!--                 <configuration> -->
-            <!--                     <stylesheetfile>${basedir}/src/main/javadoc/stylesheet.css</stylesheetfile> -->
-            <!--                     <show>public</show> -->
-            <!--                 </configuration> -->
-            <!--             </plugin> -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
@@ -452,9 +466,13 @@
 
     <distributionManagement>
         <repository>
-            <id>sonatype-nexus-staging</id>
+            <id>ossrh</id>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
         <site>
             <id>site</id>
             <url>scm:git:https://github.com/apiportal/abyss-echoserver.git</url>
