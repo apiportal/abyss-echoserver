@@ -1,8 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.verapi.abyss</groupId>
     <artifactId>abyss-echo-server</artifactId>
-    <version>1.0</version>
+    <version>1.0-SNAPSHOT</version>
 
     <name>Abyss Echo Server</name>
     <description>Abyss Echo Server Project</description>
@@ -59,8 +60,8 @@
         <url>https://github.com/apiportal/abyss-echoserver</url>
         <connection>scm:git:git://github.com/apiportal/abyss-echoserver.git</connection>
         <developerConnection>scm:git:git@github.com:apiportal/abyss-echoserver.git</developerConnection>
-      <tag>v1.0</tag>
-  </scm>
+        <tag>v1.0</tag>
+    </scm>
 
     <properties>
         <version.vertx>3.6.3</version.vertx>
@@ -84,6 +85,8 @@
         <version.maven-jar-plugin>3.1.0</version.maven-jar-plugin>
         <version.surefire.plugin>3.0.0-M3</version.surefire.plugin>
         <version.assembly.plugin>3.1.1</version.assembly.plugin>
+        <version.maven-gpg-plugin.plugin>1.6</version.maven-gpg-plugin.plugin>
+        <version.maven-scm-publish-plugin>3.0.0</version.maven-scm-publish-plugin>
         <site.path>snapshot</site.path>
     </properties>
 
@@ -142,6 +145,9 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
                     <version>${version.maven-site-plugin}</version>
+                    <configuration>
+                        <skipDeploy>true</skipDeploy>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -190,6 +196,19 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${version.surefire.plugin}</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>${version.maven-gpg-plugin.plugin}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-scm-publish-plugin</artifactId>
+                    <version>${version.maven-scm-publish-plugin}</version>
+                    <configuration>
+                        <scmBranch>gh-pages</scmBranch>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -218,14 +237,15 @@
                         </goals>
                         <configuration>
                             <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <manifestEntries>
                                         <Main-Class>com.verapi.abyss.echo.server.Launcher</Main-Class>
                                         <Main-Verticle>com.verapi.abyss.echo.server.HttpServerVerticle</Main-Verticle>
                                     </manifestEntries>
                                 </transformer>
                             </transformers>
-                            <artifactSet />
+                            <artifactSet/>
                             <outputFile>${project.build.directory}/${project.artifactId}-${project.version}-fat.jar
                             </outputFile>
                         </configuration>
@@ -247,7 +267,9 @@
                 <artifactId>maven-release-plugin</artifactId>
                 <version>${version.maven-release-plugin}</version>
                 <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
                     <tagNameFormat>v@{project.version}</tagNameFormat>
+                    <releaseProfiles>release</releaseProfiles>
                 </configuration>
             </plugin>
             <plugin>
@@ -301,6 +323,57 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                        <configuration>
+                            <keyname>${gpg.keyname}</keyname>
+                            <passphraseServerId>${gpg.keyname}</passphraseServerId>
+                            <gpgArguments>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
+                            </gpgArguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>stage-for-scm-publish</id>
+                        <phase>post-site</phase>
+                        <goals>
+                            <goal>stage</goal>
+                        </goals>
+                        <configuration>
+                            <skipDeploy>false
+                            </skipDeploy><!-- MSITE-652: configuration won't be necessary with m-site-p 3.2 -->
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-scm-publish-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>scm-publish</id>
+                        <phase>site-deploy</phase>
+                        <goals>
+                            <goal>publish-scm</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
@@ -377,5 +450,16 @@
             </properties>
         </profile>
     </profiles>
+
+    <distributionManagement>
+        <repository>
+            <id>sonatype-nexus-staging</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+        <site>
+            <id>site</id>
+            <url>scm:git:git://github.com/apiportal/abyss-echoserver.git</url>
+        </site>
+    </distributionManagement>
 
 </project>
