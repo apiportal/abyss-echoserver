@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.verapi.abyss</groupId>
     <artifactId>abyss-echo-server</artifactId>
-    <version>1.0</version>
+    <version>1.0-SNAPSHOT</version>
 
     <name>Abyss Echo Server</name>
     <description>Abyss Echo Server Project</description>
@@ -57,9 +57,9 @@
 
     <scm>
         <url>https://github.com/apiportal/abyss-echoserver</url>
-        <connection>scm:git:git://github.com/apiportal/abyss-echoserver.git</connection>
-        <developerConnection>scm:git:git@github.com:apiportal/abyss-echoserver.git</developerConnection>
-        <tag>v1.0</tag>
+        <connection>scm:git:https://github.com/apiportal/abyss-echoserver.git</connection>
+        <developerConnection>scm:git:https://github.com:apiportal/abyss-echoserver.git</developerConnection>
+<!--        <tag>v1.0</tag>-->
     </scm>
 
     <properties>
@@ -456,7 +456,7 @@
         </repository>
         <site>
             <id>site</id>
-            <url>scm:git:git://github.com/apiportal/abyss-echoserver.git</url>
+            <url>scm:git:https://github.com/apiportal/abyss-echoserver.git</url>
         </site>
     </distributionManagement>
 
