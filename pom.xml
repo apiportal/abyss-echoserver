@@ -58,7 +58,7 @@
     <scm>
         <url>https://github.com/apiportal/abyss-echoserver</url>
         <connection>scm:git:https://github.com/apiportal/abyss-echoserver.git</connection>
-        <developerConnection>scm:git:https://github.com:apiportal/abyss-echoserver.git</developerConnection>
+        <developerConnection>scm:git:https://github.com/apiportal/abyss-echoserver.git</developerConnection>
 <!--        <tag>v1.0</tag>-->
     </scm>
 
