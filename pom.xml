@@ -1,8 +1,13 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.verapi.abyss</groupId>
     <artifactId>abyss-echo-server</artifactId>
     <version>1.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
     <name>Abyss Echo Server</name>
     <description>Abyss Echo Server Project</description>
@@ -239,14 +244,15 @@
                         </goals>
                         <configuration>
                             <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <manifestEntries>
                                         <Main-Class>com.verapi.abyss.echo.server.Launcher</Main-Class>
                                         <Main-Verticle>com.verapi.abyss.echo.server.HttpServerVerticle</Main-Verticle>
                                     </manifestEntries>
                                 </transformer>
                             </transformers>
-                            <artifactSet />
+                            <artifactSet/>
                             <outputFile>${project.build.directory}/${project.artifactId}-${project.version}-fat.jar
                             </outputFile>
                         </configuration>
