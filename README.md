@@ -1,6 +1,6 @@
 # Abyss Echo Server Application
 
-This application creates a fat jar which includes a basic endpoint that returns 
+This application creates a fat jar which includes a basic endpoint that replies 
 ``` xml
 <h1>Hello</h1>.
 ```
