@@ -112,7 +112,7 @@
         <version.maven-gpg-plugin.plugin>1.6</version.maven-gpg-plugin.plugin>
         <version.maven-scm-publish-plugin>3.0.0</version.maven-scm-publish-plugin>
         <version.maven-source-plugin>3.0.1</version.maven-source-plugin>
-        <version.maven-javadoc-plugin>3.0.0</version.maven-javadoc-plugin>
+        <version.maven-javadoc-plugin>3.1.0</version.maven-javadoc-plugin>
         <site.path>snapshot</site.path>
     </properties>
 
@@ -482,10 +482,24 @@
 
     <profiles>
         <profile>
-            <id>release</id>
+            <id>sonatype-oss-release</id>
             <properties>
                 <site.path>release</site.path>
             </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>${version.maven-javadoc-plugin}</version>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>${version.maven-gpg-plugin.plugin}</version>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 
