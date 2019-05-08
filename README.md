@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/apiportal/abyss-echoserver.svg?branch=master)](https://travis-ci.org/apiportal/abyss-echoserver)
+
 # Abyss Echo Server Application
 
 This application creates a fat jar which includes a basic endpoint that returns 
