@@ -1,18 +1,18 @@
 language: java
 jdk:
-- openjdk8
+  - openjdk8
 cache:
   directories:
-  - "$HOME/.m2"
+    - "$HOME/.m2"
 before_install:
-- echo $GPG_SECRET_KEYS | base64 --decode | gpg --import
-- echo $GPG_OWNERTRUST | base64 --decode | gpg --import-ownertrust
+  - echo $GPG_SECRET_KEYS | base64 --decode | gpg --import
+  - echo $GPG_OWNERTRUST | base64 --decode | gpg --import-ownertrust
 install:
-- mvn -s .travis.maven.settings.xml -version -B
+  - mvn -s .travis.maven.settings.xml -version -B
 script:
-- mvn -s .travis.maven.settings.xml clean install deploy -P sonatype-oss-release
+  - mvn -s .travis.maven.settings.xml clean install deploy -P sonatype-oss-release
 
 # Send notification to Slack
 notifications:
   slack:
-    secure: OQ9XhzKQz09Tudz7l9rf5ctcga5SfHjkRyK7IQQOXr2iJFuErixQr3VTjSYr13h/kndznhc0HmFEEI1QXc8X9Y3kXt1YPb34L55++Pvd5gq9YIlOm411Eo6hziNOfrFQafwTpy+dqNDPF+A7sNC+iP1XUYQ5ZTDTW1890HxutNjbFnfZe6i78F1WoyfqJNFM9irKskc5hRROhW/8N8c24/QeZJ2jyWqpQTNyvfzi43Tv8WRUa62RpWxwL0qzAzN+bVSngtwmV/pBA6eMXOv/khnr3cd8fIPtLNvLRnJOWZ5hmdAz9kkf9ge/xQLWO/gf+wklqFisFuLinCOktU69xTuJrWpbuSozsu2UwFvzUYxEbiAP0Eyh9avZMX5DBbxdFh1CfWFVexoQsbjtxCRFeV/JghK87MKU5ROQq6xFr2yGYUmHACfFtXZIjAKUb2y2ANuYDYCKTMIxCFMnqKgFNV9CoJS20ZzJYnX6rJoLlapCEzbQTEpvb0j6pu8DyzAV2Ih1fFiP3td6p79InW/xrPsaNGd1cY5v6emdyEI+k3eDom+OSSl/fNZvnAdkWQNnBRt7uBOmzN2Y6JFo1+olfBAeurMhju7t1s63rwv78Y1rG46/SvRX7yXntpwqDsp9xKTmlYG2G105WVAdcm88Id0cuWlXkFcAtQyzwdS5c/I=
+    secure: "CQOxTg/Mm4mcLH6YDCJ2h2O/I7NeKh/a3JX7lwZNEHlGAQHD5PC77vJBvUsgKOsj7zUsYH3EyyRDJCwybk7fwMV7vep5j5/tPFrbkLEPhLiQ2Lxd6BmV6L3WVhs2NvUmljvjVEtT8XQxuypMrh+VIW/rARRQcq69LJrW6itXixawWC1MZMUhL7Exl76UCwxR7F//9G4K/QG7ei4KLj6IZzFe5z5+Y7iJSajkBIdlF3EvUVWAzjQhbqzNvpQTHA4olbVUuiZRiUNwiLa/7YPpwLpcQFYYqfA8juK+Eum3RzIUdOUOvRF6qLqeeFK+1BIjTFGsl8PQnqkJdvRVVI3hJ72AabVy+cDIZA6/MnQxoeMKvLAMEGForp4vseUOedvOJEHCDU0s6nV6t8RPogILXjgaD5ydpJN4NLtDEf+GEtdDEhblAJNFRmdVqcPpPdtXM/UJmRVF9R270QGDPBwm0LLZdp3Q7sWUAc1DsGX6QEH7V6pcsa7mRUASaqC4RhXu0FRg56hJGvIyEFO+/9Zkaau+uKKnsNB8TclmdHoQ82bSycdSHHzswDvmG+dmSNjuGc+FWALMnX8DPg0BB2bjHZGT2HwKIThyx+meJ8ZguIvxBv1ZCjDwUYNzA5RaUvOlWy62x3/c90dxPJDrjhdqTEs6otEOXAyDG9vUeSxCwAY="
